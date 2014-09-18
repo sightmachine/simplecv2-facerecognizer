@@ -133,16 +133,16 @@ class FaceRecognizer(object):
                           "training images. Training not initiated.")
             return False
 
-        self.image_size = images[0].size
+        self.image_size = images[0].size_tuple
         w, h = self.image_size
-        images = [img if img.size == self.image_size else img.resize(w, h)
+        images = [img if img.size_tuple == self.image_size else img.resize(w, h)
                   for img in images]
 
         self.int_labels = [self.labels_dict[key] for key in labels]
         self.train_labels = labels
         labels = np.array(self.int_labels)
         self.train_imgs = images
-        cv2imgs = [img.get_gray_ndarray() for img in images]
+        cv2imgs = [img.to_gray() for img in images]
 
         self.model.train(cv2imgs, labels)
         self.trained = True
@@ -205,11 +205,11 @@ class FaceRecognizer(object):
             warnings.warn("FaceRecognizer is not trained")
             return None
 
-        if image.size != self.image_size:
+        if image.size_tuple != self.image_size:
             w, h = self.image_size
             image = image.resize(w, h)
 
-        cv2img = image.get_gray_ndarray()
+        cv2img = image.to_gray()
         label, confidence = self.model.predict(cv2img)
         ret_label = self.labels_dict_rev.get(label)
         if not ret_label:

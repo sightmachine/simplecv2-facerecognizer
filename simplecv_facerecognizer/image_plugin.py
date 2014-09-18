@@ -211,7 +211,7 @@ def find_haar_features(img, cascade, scale_factor=1.2, min_neighbors=2,
 
     haar_classify = cv2.CascadeClassifier(cascade.get_fhandle())
     objects = haar_classify.detectMultiScale(
-        img.get_gray_ndarray(), scaleFactor=scale_factor,
+        img.to_gray(), scaleFactor=scale_factor,
         minNeighbors=min_neighbors, minSize=min_size,
         flags=use_canny)
 
@@ -277,9 +277,9 @@ def anonymize(img, block_size=10, features=None, transform=None):
     if found:
         for feature_set in found:
             for region in feature_set:
-                rect = (region.top_left_corner()[0],
-                        region.top_left_corner()[1],
-                        region.get_width(), region.get_height())
+                rect = (region.top_left_corner[0],
+                        region.top_left_corner[1],
+                        region.width, region.height)
                 if transform is None:
                     img = img.pixelize(block_size=block_size, region=rect)
                 else:

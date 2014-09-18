@@ -51,10 +51,10 @@ def test_find_haar_features():
     assert len(f2) > 0
     f.draw()
     f2.draw()
-    f[0].get_width()
-    f[0].get_height()
-    f[0].length()
-    f[0].get_area()
+    f[0].width
+    f[0].height
+    f[0].length
+    f[0].area
 
     results = [img, img1]
     name_stem = "test_find_haar_features"
@@ -123,16 +123,16 @@ def test_anonymize():
     anon_img1 = img.anonymize(features=["face.xml", "profile.xml"])
 
     # match both images
-    assert_equals(anon_img.get_ndarray().data, anon_img1.get_ndarray().data)
+    assert_equals(anon_img.data, anon_img1.data)
 
     # transform function
     def transform_blur(img, rect):
-        np_array = img.get_ndarray()
+        np_array = img
         x, y, w, h = rect
         crop_np_array = np_array[y:y+h, x:x+w]
         crop_img = Factory.Image(array=crop_np_array)
         blur_img = crop_img.blur((15, 15))
-        blur_np_array = blur_img.get_ndarray()
+        blur_np_array = blur_img
         np_array[y:y+h, x:x+w] = blur_np_array
         return Factory.Image(array=np_array)
 
